@@ -7,5 +7,5 @@ scipy
 pymupdf
 torch
 tqdm
-
+sentence-transformers
 
