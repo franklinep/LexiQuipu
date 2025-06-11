@@ -8,4 +8,4 @@ pymupdf
 torch
 tqdm
 sentence-transformers
-
+chromadb
