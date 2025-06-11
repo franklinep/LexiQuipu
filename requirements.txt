@@ -9,3 +9,4 @@ torch
 tqdm
 sentence-transformers
 chromadb
+fastapi[standard]
