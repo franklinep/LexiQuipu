@@ -18,7 +18,7 @@ def build_vector_database(corpus_path, db_path, collection_name):
     collection = client.get_or_create_collection(name=collection_name)
 
     print("Preparando datos para la indexación...")
-    
+
     all_embeddings = []
     all_documents = []
     all_metadatas = []
@@ -30,7 +30,7 @@ def build_vector_database(corpus_path, db_path, collection_name):
 
         for i, chunk in enumerate(doc['chunks']):
             chunk_id = f"{doc_id}_chunk_{i}"
-            
+
             chunk_metadata = doc_metadata.copy()
             chunk_metadata['chunk_index'] = i # Guardamos el índice del chunk también
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     script_dir = os.path.dirname(__file__)
     corpus_file = os.path.abspath(os.path.join(script_dir, '..', 'output', 'corpus_vectorizado.json'))
     db_directory = os.path.abspath(os.path.join(script_dir, '..', 'db'))
-    
+
     COLLECTION = "jurisprudencia_peruana"
 
     build_vector_database(corpus_file, db_directory, COLLECTION)
