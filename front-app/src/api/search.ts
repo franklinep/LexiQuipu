@@ -10,8 +10,13 @@ export interface SearchRequest {
     distance: number;
   }
 
-  export async function searchJurisprudencia(query: string, topK: number = 5): Promise<SearchResult[]> {
-    const response = await fetch("http://127.0.0.1:8000/search", {
+  export interface GeneratedResponse {
+    generated_answer: string;
+    source_documents: SearchResult[];
+  }
+
+  export async function searchJurisprudencia(query: string, topK: number = 5): Promise<GeneratedResponse> {
+    const response = await fetch("http://127.0.0.1:8000/search/generate", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -20,7 +25,7 @@ export interface SearchRequest {
     });
 
     if (!response.ok) {
-      throw new Error("Error en la búsqueda");
+      throw new Error("Error en la búsqueda y generación");
     }
 
     const data = await response.json();
