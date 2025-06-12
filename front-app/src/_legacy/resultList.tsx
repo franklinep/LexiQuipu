@@ -1,6 +1,6 @@
 import React from 'react';
 import { SearchResult } from '../api/search';
-import ResultItem from './resultItem';
+import ResultItem from '../_legacy/resultItem';
 
 const ResultsList: React.FC<{ results: SearchResult[] }> = ({ results }) => (
   <ul className="space-y-2">

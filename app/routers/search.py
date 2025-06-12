@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 from app.schemas.search import SearchRequest, SearchResult, GeneratedResponse
 from app.crud.vector_query import search_documents
-from app.services.generative_ai import generate_answer_from_context
+from app.services.generative_ai import stream_answer_from_context 
+from fastapi.responses import StreamingResponse
 
 router = APIRouter(prefix="/search", tags=["Search"])
 
@@ -9,21 +10,19 @@ router = APIRouter(prefix="/search", tags=["Search"])
 def perform_search(request: SearchRequest):
     return search_documents(query=request.query, top_k=request.top_k)
 
-@router.post("/generate", response_model=GeneratedResponse)
-def perform_generation(request: SearchRequest):
+@router.post("/generate") # Eliminamos el response_model porque StreamingResponse no funciona bien con él
+def perform_generation_stream(request: SearchRequest):
     """
-    Endpoint para el RAG completo: busca documentos y genera una respuesta basado en la query del usuario
-    pero suporteada por una LLM.
+    Endpoint para el RAG completo con streaming.
+    1. Busca documentos relevantes.
+    2. Pasa los documentos y la query a la LLM (Gemini).
+    3. Transmite la respuesta del LLM en tiempo real.
     """
-
-    # Busca documentos relevantes desde la base de datos vectorizada
+    # Busca los documentos relevantes
     relevant_docs = search_documents(query=request.query, top_k=request.top_k)
 
-    # Genera una respuesta de un LLM basada en el contexto   
-    answer = generate_answer_from_context(request.query, relevant_docs)
+    # Obtiene el generador de respuesta de la LLM
+    response_generator = stream_answer_from_context(request.query, relevant_docs)
 
-    # Retorna la respuesta generada y los documentos fuente
-    return GeneratedResponse(
-        generated_answer=answer,
-        source_documents=relevant_docs
-    )
+    # Retorna la respuesta como un stream
+    return StreamingResponse(response_generator, media_type="text/event-stream")

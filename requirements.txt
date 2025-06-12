@@ -10,3 +10,5 @@ tqdm
 sentence-transformers
 chromadb
 fastapi[standard]
+google-generativeai
+python-dotenv
