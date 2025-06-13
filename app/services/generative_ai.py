@@ -1,6 +1,7 @@
 from app.schemas.search import SearchResult, ChatMessage
 from typing import List, Generator
 import os
+import json
 from dotenv import load_dotenv
 import google.generativeai as genai
 
@@ -32,6 +33,10 @@ def stream_answer_from_context(query: str, history: List[ChatMessage], search_re
     """
     Genera y transmite una respuesta de la LLM, ahora con memoria conversacional.
     """
+
+    source_data = [doc.model_dump() for doc in search_results]
+    yield json.dumps({"type": "sources", "data": source_data}) + "\n<END_OF_SOURCES>\n"
+
     if not search_results:
         yield "No encontré información relevante en mi base de datos para responder a tu pregunta. Por favor, intenta con otra consulta."
         return
