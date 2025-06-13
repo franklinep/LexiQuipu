@@ -18,7 +18,7 @@ const PromptInput: React.FC<Props> = ({ onSubmit, isLoading }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto p-4">
+    <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto px-4 py-1">
       <div className="relative">
         <input
           type="text"
