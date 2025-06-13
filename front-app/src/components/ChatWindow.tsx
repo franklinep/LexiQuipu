@@ -8,9 +8,12 @@ const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const historyToSend = messages.filter(msg => !msg.isLoading);
+  
 
   const handleSendMessage = (query: string) => {
+
+    const historyToSend = messages.filter(msg => !msg.isLoading);
+
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
       role: 'user',
@@ -30,6 +33,13 @@ const ChatWindow: React.FC = () => {
     streamChat(
       query,
       historyToSend,
+      (sources) => {
+        setMessages(prev => prev.map(msg => 
+            msg.id === assistantLoadingMessage.id 
+            ? { ...msg, sources: sources } 
+            : msg
+        ));
+      },
       (token) => {
         setMessages(prev =>
           prev.map(msg =>
@@ -64,9 +74,9 @@ const ChatWindow: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen bg-[#131314]">
-        <header className="text-center p-4 border-b border-gray-700">
+        <header className="text-center p-3 border-b border-gray-700/50">
             <h1 className="text-2xl font-bold text-white/90">LexiQuipu</h1>
-            <p className="text-sm text-gray-400/70">Tu Asistente Legal de Jurisprudencia Peruana</p>
+            <p className="text-sm text-gray-400/60">Tu Asistente Legal de Jurisprudencia Peruana</p>
         </header>
         <MessageList messages={messages} />
         <PromptInput onSubmit={handleSendMessage} isLoading={isLoading} />
