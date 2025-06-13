@@ -51,11 +51,4 @@ def build_vector_database(corpus_path, db_path, collection_name):
     print("\n¡Indexación completada!")
     print(f"La colección '{collection_name}' ahora contiene {count} chunks.")
 
-if __name__ == '__main__':
-    script_dir = os.path.dirname(__file__)
-    corpus_file = os.path.abspath(os.path.join(script_dir, '..', 'output', 'corpus_vectorizado.json'))
-    db_directory = os.path.abspath(os.path.join(script_dir, '..', 'db'))
 
-    COLLECTION = "jurisprudencia_peruana"
-
-    build_vector_database(corpus_file, db_directory, COLLECTION)

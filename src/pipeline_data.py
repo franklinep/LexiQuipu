@@ -1,8 +1,6 @@
 import fitz
 import os
-import json
 import re
-import unicodedata
 
 def recortar_pdf(ruta_original):
     """
@@ -142,11 +140,3 @@ def procesar_pdf(pdf_path):
 def procesar_todos_los_pdfs(directorio):
     return [procesar_pdf(os.path.join(directorio, f))
             for f in os.listdir(directorio) if f.lower().endswith(".pdf")]
-
-if __name__ == "__main__":
-    carpeta = "pdfs"
-    salida = "salida_pdfs.json"
-    resultados = procesar_todos_los_pdfs(carpeta)
-    with open(salida, "w", encoding="utf-8") as f:
-        json.dump(resultados, f, ensure_ascii=False, indent=2)
-    print(f"Procesamiento completo. Resultados en {salida}")

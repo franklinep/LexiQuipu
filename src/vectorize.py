@@ -39,10 +39,3 @@ def vectorize_corpus(input_path, output_path):
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(corpus, f, indent=2, ensure_ascii=False)
     print(f"Corpus vectorizado guardado en: {output_path}")
-
-if __name__ == '__main__':
-    script_dir = os.path.dirname(__file__)
-    input_file = os.path.abspath(os.path.join(script_dir, '..', 'corpus.json'))
-    output_file = os.path.abspath(os.path.join(script_dir, '..', 'output', 'corpus_vectorizado.json'))
-
-    vectorize_corpus(input_file, output_file)
