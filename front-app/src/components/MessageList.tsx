@@ -1,4 +1,3 @@
-    // src/components/chat/MessageList.tsx
 import React, { useEffect, useRef } from 'react';
 import { ChatMessage as ChatMessageType } from '../types/chat';
 import Message from './Message';
