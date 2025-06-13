@@ -1,4 +1,4 @@
-import { ChatMessage } from "../types/chat";
+import { ChatMessage, SourceDocument } from "../types/chat";
 /**
  * Llama al endpoint de generación de chat y maneja el stream.
  * @param query La pregunta del usuario.
@@ -9,6 +9,7 @@ import { ChatMessage } from "../types/chat";
 export async function streamChat(
     query: string,
     history: ChatMessage[],
+    onSources: (sources: SourceDocument[]) => void,
     onToken: (token: string) => void,
     onComplete: () => void,
     onError: (error: Error) => void
@@ -19,7 +20,7 @@ export async function streamChat(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query: query, history: history,top_k: 5 }), 
+        body: JSON.stringify({ query: query, history: history,top_k: 10 }), 
       });
   
       if (!response.ok) {
@@ -33,19 +34,46 @@ export async function streamChat(
   
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
-      let reading = true;
+      //let reading = true;
+
+      let buffer = "";
+      const separator = "\n<END_OF_SOURCES>\n";
+      let sourcesFound = false;
+
   
-      while (reading) {
+      while (true) {
         const { done, value } = await reader.read();
-        if (done) {
-          reading = false;
-          break;
-        }
-        const chunk = decoder.decode(value, { stream: true });
-        onToken(chunk); 
-      }
+        if (done) break;
   
-      onComplete(); 
+        buffer += decoder.decode(value, { stream: true });
+  
+        if (!sourcesFound) {
+          const separatorIndex = buffer.indexOf(separator);
+          if (separatorIndex !== -1) {
+            const sourcesJsonString = buffer.substring(0, separatorIndex);
+            const restOfBuffer = buffer.substring(separatorIndex + separator.length);
+            
+            try {
+              const parsed = JSON.parse(sourcesJsonString);
+              if (parsed.type === 'sources') {
+                onSources(parsed.data);
+              }
+            } catch (e) {
+              console.error("Error al parsear las fuentes JSON:", e);
+            }
+            
+            if (restOfBuffer) {
+              onToken(restOfBuffer);
+            }
+            sourcesFound = true;
+            buffer = "";
+          }
+        } else {
+          onToken(buffer);
+          buffer = "";
+        }
+      }
+      onComplete();
   
     } catch (err) {
       console.error("Error al hacer streaming del chat:", err);
