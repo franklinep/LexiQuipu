@@ -1,4 +1,3 @@
-// src/components/chat/ChatWindow.tsx
 import React, { useState } from 'react';
 import { ChatMessage } from '../types/chat';
 import MessageList from './MessageList';
@@ -8,6 +7,8 @@ import { streamChat } from '../api/chat';
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const historyToSend = messages.filter(msg => !msg.isLoading);
 
   const handleSendMessage = (query: string) => {
     const userMessage: ChatMessage = {
@@ -28,6 +29,7 @@ const ChatWindow: React.FC = () => {
 
     streamChat(
       query,
+      historyToSend,
       (token) => {
         setMessages(prev =>
           prev.map(msg =>

@@ -22,7 +22,7 @@ def perform_generation_stream(request: SearchRequest):
     relevant_docs = search_documents(query=request.query, top_k=request.top_k)
 
     # Obtiene el generador de respuesta de la LLM
-    response_generator = stream_answer_from_context(request.query, relevant_docs)
+    response_generator = stream_answer_from_context(request.query, request.history, relevant_docs)
 
     # Retorna la respuesta como un stream
     return StreamingResponse(response_generator, media_type="text/event-stream")

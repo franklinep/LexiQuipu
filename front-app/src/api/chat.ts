@@ -1,4 +1,4 @@
-
+import { ChatMessage } from "../types/chat";
 /**
  * Llama al endpoint de generación de chat y maneja el stream.
  * @param query La pregunta del usuario.
@@ -8,6 +8,7 @@
  */
 export async function streamChat(
     query: string,
+    history: ChatMessage[],
     onToken: (token: string) => void,
     onComplete: () => void,
     onError: (error: Error) => void
@@ -18,7 +19,7 @@ export async function streamChat(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query: query, top_k: 5 }), 
+        body: JSON.stringify({ query: query, history: history,top_k: 5 }), 
       });
   
       if (!response.ok) {
