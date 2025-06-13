@@ -25,7 +25,7 @@ const PromptInput: React.FC<Props> = ({ onSubmit, isLoading }) => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Haz una pregunta a LexiQuipu..."
-          className="w-full bg-[#1e1f20] border border-gray-600 rounded-full py-3 pl-6 pr-14 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+          className="w-full bg-[#1e1f20] border border-gray-600 rounded-full py-3 pl-6 pr-14 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 text-white/80"
           disabled={isLoading}
         />
         <button
