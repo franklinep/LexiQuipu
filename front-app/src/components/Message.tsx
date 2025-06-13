@@ -2,6 +2,7 @@
 import React from 'react';
 import { ChatMessage } from '../types/chat';
 import { FaUser, FaRobot } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
 
 const Message: React.FC<{ message: ChatMessage }> = ({ message }) => {
   const isUser = message.role === 'user';
@@ -24,7 +25,10 @@ const Message: React.FC<{ message: ChatMessage }> = ({ message }) => {
       )}
 
       <div className={`p-4 rounded-2xl max-w-2xl ${isUser ? 'bg-blue-600 rounded-br-none text-white/85' : 'bg-[#1e1f20] rounded-bl-none text-white/85'}`}>
-        {message.isLoading ? <LoadingIndicator /> : <p className="whitespace-pre-wrap">{message.content}</p>}
+        {/* {message.isLoading ? <LoadingIndicator /> : <p className="whitespace-pre-wrap">{message.content}</p>} */}
+        <article className="prose prose-invert prose-p:my-0 prose-headings:my-2">
+            <ReactMarkdown>{message.content}</ReactMarkdown>
+        </article>
         {/* Documentos fuente */}
       </div>
 
