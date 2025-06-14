@@ -5,7 +5,8 @@
 * Espinoza Pari, Franklin
 * De la Cruz Valdiviezo, Pedro
 
-![Demo LexiQuipu](https://s4.ezgif.com/tmp/ezgif-4c8c50fd8d3ca8.gif)
+![NLP PROYECTO RAG y 18 páginas más - Personal_ Microsoft_ Edge 2025-06-13 13-53-35](https://github.com/user-attachments/assets/9e8298a5-9505-4c23-841b-02915d0a82db)
+
 
 ## Descripcion del Proyecto:
 
