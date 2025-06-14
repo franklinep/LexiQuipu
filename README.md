@@ -5,7 +5,7 @@
 * Espinoza Pari, Franklin
 * De la Cruz Valdiviezo, Pedro
 
-![Demo LexiQuipu](https://i.imgur.com/bKplfx0.gif)
+![Demo LexiQuipu](https://s4.ezgif.com/tmp/ezgif-4c8c50fd8d3ca8.gif)
 
 ## Descripcion del Proyecto:
 
