@@ -5,6 +5,8 @@
 * Espinoza Pari, Franklin
 * De la Cruz Valdiviezo, Pedro
 
+![Demo LexiQuipu](https://i.imgur.com/bKplfx0.gif)
+
 ## Descripcion del Proyecto:
 
 El conocimiento de un modelo de lenguaje está limitado a la información presente en sus datos de entrenamiento (conocimiento paramétrico). Esto lo hace propenso a "alucinar" hechos y a quedar desactualizado. La Generación Aumentada por Recuperación (RAG) es una técnica que mitiga este problema al permitir que el modelo consulte una base de conocimiento externa y actualizada en tiempo de inferencia. El proceso típico implica:
