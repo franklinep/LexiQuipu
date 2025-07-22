@@ -1,17 +1,44 @@
-from app.utils.embedding_model import embedding_model
-from app.external_services.chromadb_client import collection
+from llama_index.core import VectorStoreIndex, Settings
+from llama_index.vector_stores.chroma import ChromaVectorStore
+from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
+import chromadb
 from app.schemas.search import SearchResult
+import os
+from dotenv import load_dotenv
 
 def search_documents(query: str, top_k: int) -> list[SearchResult]:
-    query_embedding = embedding_model.encode(query).tolist()
-    results = collection.query(query_embeddings=[query_embedding], n_results=top_k)
+    """
+    Busca documentos relevantes en el índice vectorial utilizando embeddings de Google.
+    """
+    # 1. Cargamos la API Key y configurar el modelo de embedding
+    load_dotenv()
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if not api_key:
+        raise ValueError("La variable de entorno GOOGLE_API_KEY no está configurada.")
 
+    embed_model = GoogleGenAIEmbedding(
+        model_name="models/embedding-001",
+        api_key=api_key
+    )
+    Settings.embed_model = embed_model
+
+    # 2. Conectamos a la base de datos y obtenemos el índice
+    db = chromadb.PersistentClient(path="./db")
+    chroma_collection = db.get_or_create_collection("lexiquipu")
+    vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
+    index = VectorStoreIndex.from_vector_store(vector_store)
+
+    # 3. Realizamos la búsqueda
+    retriever = index.as_retriever(similarity_top_k=top_k)
+    nodes = retriever.retrieve(query)
+
+    # 4. Formateamos y devolvemos los resultados
     return [
         SearchResult(
-            id=results["ids"][0][i],
-            text=results["documents"][0][i],
-            metadata=results["metadatas"][0][i],
-            distance=results["distances"][0][i]
+            id=node.id_,
+            text=node.get_content(),
+            metadata=node.metadata,
+            score=node.score  # Usar score en lugar de distance
         )
-        for i in range(len(results["ids"][0]))
+        for node in nodes
     ]

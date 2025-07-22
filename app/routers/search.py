@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.schemas.search import SearchRequest, SearchResult, GeneratedResponse
+from app.schemas.search import SearchRequest, SearchResult
 from app.crud.vector_query import search_documents
 from app.services.generative_ai import stream_answer_from_context 
 from fastapi.responses import StreamingResponse
