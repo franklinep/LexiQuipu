@@ -20,18 +20,18 @@ export async function streamChat(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query: query, history: history,top_k: 10 }), 
+        body: JSON.stringify({ query: query, history: history,top_k: 10 }),
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Error del servidor: ${response.status} ${errorText}`);
       }
-  
+
       if (!response.body) {
         throw new Error("El cuerpo de la respuesta está vacío.");
       }
-  
+
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
       //let reading = true;
@@ -40,19 +40,19 @@ export async function streamChat(
       const separator = "\n<END_OF_SOURCES>\n";
       let sourcesFound = false;
 
-  
+
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-  
+
         buffer += decoder.decode(value, { stream: true });
-  
+
         if (!sourcesFound) {
           const separatorIndex = buffer.indexOf(separator);
           if (separatorIndex !== -1) {
             const sourcesJsonString = buffer.substring(0, separatorIndex);
             const restOfBuffer = buffer.substring(separatorIndex + separator.length);
-            
+
             try {
               const parsed = JSON.parse(sourcesJsonString);
               if (parsed.type === 'sources') {
@@ -61,7 +61,7 @@ export async function streamChat(
             } catch (e) {
               console.error("Error al parsear las fuentes JSON:", e);
             }
-            
+
             if (restOfBuffer) {
               onToken(restOfBuffer);
             }
@@ -74,7 +74,7 @@ export async function streamChat(
         }
       }
       onComplete();
-  
+
     } catch (err) {
       console.error("Error al hacer streaming del chat:", err);
       onError(err instanceof Error ? err : new Error("Ocurrió un error desconocido"));
