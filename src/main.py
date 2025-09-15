@@ -6,8 +6,8 @@ from build_database import build_vector_database
 
 if __name__ == "__main__":
     # 1. Procesar todos los PDFs y generar el corpus
-    carpeta = "pdfs"
-    salida = "corpus.json"
+    carpeta = "C:\\fespa-uni\\UNI-2025-I\\nlp-curso\\LexiQuipu\\pdfs"
+    salida = "C:\\fespa-uni\\UNI-2025-I\\nlp-curso\\LexiQuipu\\corpus.json"
     script_dir = os.path.dirname(__file__)
     resultados = procesar_todos_los_pdfs(carpeta)
     with open(salida, "w", encoding="utf-8") as f:
